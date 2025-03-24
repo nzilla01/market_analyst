@@ -1,0 +1,19 @@
+<div class="author">
+    <h1 class="author_heeading">Search Result</h1>
+</div>
+
+<section class="article">
+
+<ul class="post">
+        <% data.forEach(article => { %>
+          <li>
+              <p><%= article.body.substring(0, 100) %>...</p> <!-- Show only first 100 characters -->
+              <span><%= article.date.toDateString() %></span>
+            <br>
+            <a href="/article/<%= article._id %>" class="read-more">Read More</a>
+          </li>
+        <% }) %>
+      </ul>
+      
+
+</section>

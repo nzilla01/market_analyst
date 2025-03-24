@@ -1,0 +1,40 @@
+<div class="admin">
+    <h2>Dashboard</h2>
+</div>
+
+<div class="admin_title">
+    <h3>Posts</h3>
+    <a href="/add_post" class="button"> + Add New Post </a>
+</div>
+
+<ul class="admin_post">
+    <% data.forEach(article => { %>
+        <li>
+            <% 
+                // Extract the first image using regex
+                const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
+                const firstImage = imgMatch ? imgMatch[1] : null;
+            %>
+
+            <a href="/article/<%= article._id %>">
+                <% if (firstImage) { %>
+                    <img src="<%= firstImage %>" alt="Post Image" class="article-thumbnail">
+                <% } %>
+                
+                <p><strong><%= article.title %></strong> &nearr;</p> 
+                <p><%= article.body.replace(/<[^>]*>/g, "").substring(0, 100) %>...</p>
+            </a>
+
+            <p><%= article.date.toDateString() %></p>
+            <p>By <%= article.author %></p>
+
+            <div class="admin_contrl">
+                <a href="/edit_post/<%= article._id %>" class="btn">Edit</a>
+
+                <form action="/delete-post/<%= article._id %>?_method=DELETE" method="POST">
+                    <input type="submit" value="Delete" class="btn">
+                </form>
+            </div>
+        </li>
+    <% }) %>
+</ul>

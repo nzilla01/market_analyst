@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= locals.description %>">
+    <meta name="author" content="The market Analyst">
+    <meta name="keywords" content="<%= locals.keywords %>">
+    <meta name="robots" content="<%= locals.robots %>">
+    <title><%= locals.title %></title>
+    <link rel="stylesheet" href="/css/large.css">
+    <script type="text/javascript" defer src="/script/script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+        <%- include('../partials/header.ejs') %>  
+
+       
+        <main class="main">
+            <%- include('../partials/sidebar.ejs') %>
+        <%- body %>
+        </main>
+
+        <%- include('../partials/footer.ejs') %>    
+        </header>
+    </div>
+    
+</body>
+</html>
