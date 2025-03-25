@@ -56,7 +56,7 @@ router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
     res.json({ location: '/uploads/' + req.file.filename }); // Send image URL
 });
 
-// Admin Dashboard
+// Admin sign in
 router.get('/admin', async (req, res) => {
     const local = {
         title: 'Admin Panel',
@@ -98,31 +98,31 @@ router.post('/admin', async (req, res) => {
     }
 });
 
-// User Registration
-router.post('/register', async (req, res) => {
-    try {
-        const { email, password } = req.body;
+// // User Registration
+// router.post('/register', async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
 
-        // Check if the user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.send("<script>alert('Email already exists!'); window.history.back();</script>");
-        }
+//         // Check if the user already exists
+//         const existingUser = await User.findOne({ email });
+//         if (existingUser) {
+//             return res.send("<script>alert('Email already exists!'); window.history.back();</script>");
+//         }
 
-        // Hash the password
-        const hashPassword = await bcrypt.hash(password, 10);
+//         // Hash the password
+//         const hashPassword = await bcrypt.hash(password, 10);
 
-        // Create the user
-        await User.create({ email, password: hashPassword });
+//         // Create the user
+//         await User.create({ email, password: hashPassword });
 
-        // Send success alert and redirect
-        res.send("<script>alert('Registration successful!'); window.location.href='/login';</script>");
+//         // Send success alert and redirect
+//         res.send("<script>alert('Registration successful!'); window.location.href='/login';</script>");
         
-    } catch (err) {
-        console.error("Registration Error:", err);
-        res.status(500).send("<script>alert('Something went wrong! Try again later.'); window.history.back();</script>");
-    }
-});
+//     } catch (err) {
+//         console.error("Registration Error:", err);
+//         res.status(500).send("<script>alert('Something went wrong! Try again later.'); window.history.back();</script>");
+//     }
+// });
 
 // Admin Dashboard Get Route
 router.get('/dashboard', authMiddleware, async (req, res) => {
@@ -219,36 +219,36 @@ router.delete('/delete-post/:id', authMiddleware, async(req, res) => {
 });
 
 
-// api
+// // api
 
-router.get('/admin', async (req, res) => {
-    try {
-        const articles = await Articles.find().sort({ date: 'desc' }).limit(9);
-        const videos = await Video.find().sort({ publishedAt: 'desc' }).limit(10);
+// router.get('/admin', async (req, res) => {
+//     try {
+//         const articles = await Articles.find().sort({ date: 'desc' }).limit(9);
+//         const videos = await Video.find().sort({ publishedAt: 'desc' }).limit(10);
 
-        res.render('admin/index', { articles, videos, layout: adminLayout });
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Error loading admin page");
-    }
-});
+//         res.render('admin/index', { articles, videos, layout: adminLayout });
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send("Error loading admin page");
+//     }
+// });
 
-router.post('/article/trending/:id', authMiddleware, async (req, res) => {
-    try {
-        const article = await Articles.findById(req.params.id);
-        if (!article) {
-            return res.status(404).json({ message: "Article not found" });
-        }
+// router.post('/article/trending/:id', authMiddleware, async (req, res) => {
+//     try {
+//         const article = await Articles.findById(req.params.id);
+//         if (!article) {
+//             return res.status(404).json({ message: "Article not found" });
+//         }
 
-        article.trending = !article.trending; // Toggle the trending status
-        await article.save();
+//         article.trending = !article.trending; // Toggle the trending status
+//         await article.save();
 
-        res.json({ message: `Article ${article.trending ? 'marked' : 'removed'} as trending` });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Error updating article" });
-    }
-});
+//         res.json({ message: `Article ${article.trending ? 'marked' : 'removed'} as trending` });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: "Error updating article" });
+//     }
+// });
 
 
 // Toggle Trending Status
@@ -269,6 +269,15 @@ router.post('/toggle-trending/:id', async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+router.get('/logout', async (req, res) => {
+    res.clearCookie("token"); // Clear JWT token cookie
+    res.redirect('/admin'); // ✅ Redirect to the admin login page
+});
+
+
+
+
 
 
 module.exports = router;
