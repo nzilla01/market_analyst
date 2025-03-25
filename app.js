@@ -8,6 +8,7 @@ const expresslayout = require('express-ejs-layouts'); // require express-ejs-lay
 const app = express(); // create an express app
 const methodOverride = require('method-override');
 
+
 //template engine 
 app.use(expresslayout);// use express layout
 app.set('layout', './layouts/main'); // set layout
@@ -37,6 +38,8 @@ const port =3000|| process.env.PORT; // port number
 
 app.use('/', require('./server/routes/main'));
 app.use('/', require('./server/routes/admin')); // use index route
+// app.use('/api', require('./server/routes/api'));
+
 
 app.use('/uploads', express.static('public/uploads'));
 

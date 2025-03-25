@@ -219,4 +219,56 @@ router.delete('/delete-post/:id', authMiddleware, async(req, res) => {
 });
 
 
+// api
+
+router.get('/admin', async (req, res) => {
+    try {
+        const articles = await Articles.find().sort({ date: 'desc' }).limit(9);
+        const videos = await Video.find().sort({ publishedAt: 'desc' }).limit(10);
+
+        res.render('admin/index', { articles, videos, layout: adminLayout });
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Error loading admin page");
+    }
+});
+
+router.post('/article/trending/:id', authMiddleware, async (req, res) => {
+    try {
+        const article = await Articles.findById(req.params.id);
+        if (!article) {
+            return res.status(404).json({ message: "Article not found" });
+        }
+
+        article.trending = !article.trending; // Toggle the trending status
+        await article.save();
+
+        res.json({ message: `Article ${article.trending ? 'marked' : 'removed'} as trending` });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error updating article" });
+    }
+});
+
+
+// Toggle Trending Status
+router.post('/toggle-trending/:id', async (req, res) => {
+    try {
+        const article = await Articles.findById(req.params.id);
+        if (!article) {
+            return res.status(404).send("Article not found");
+        }
+
+        // Toggle the trending status
+        article.trending = !article.trending;
+        await article.save();
+
+        res.redirect('/dashboard'); // Redirect back to admin page
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+
 module.exports = router;

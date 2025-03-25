@@ -109,37 +109,8 @@
     }
     /* the body part of index page */
 
-    .hero-page{
-        display: block;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-       
-    }
-
-    #hero_img{
-        width: 100%;
-    }
-
-    .read-more {
-        display: inline-block;
-        margin-top: 5px;
-        padding: 5px 10px;
-        background-color: #007bff; /* Blue button */
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-size: 14px;
-      }
-      
-      .read-more:hover {
-        background-color: #0056b3;
-      }
-
-      #editor-container {
-        height: 600px; /* Adjust height */
-      }
+    
+    
 
      
       

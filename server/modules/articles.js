@@ -11,7 +11,7 @@ const articlesSchema = new mongoose.Schema({
     },
     author:{
         type: String,
-        required: true,
+        required:false,
     },
     date: {
         type: Date,
@@ -20,6 +20,10 @@ const articlesSchema = new mongoose.Schema({
     dateUpdated: {
         type: Date,
         default: Date.now,
+    },
+    trending: {
+        type: Boolean,
+        default: false, // By default, an article is not trending
     }
 });
 

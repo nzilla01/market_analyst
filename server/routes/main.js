@@ -2,144 +2,129 @@ const express = require('express');
 const router = express.Router();
 const articles = require('../modules/articles');
 
+// Simulated pre-fetched videos (this prevents extra fetch requests)
+const videos = [
+    { title: "Forex Trading Basics", summary: "Learn the fundamentals of forex trading." },
+    { title: "Technical Analysis", summary: "How to use indicators to predict market movements." },
+    { title: "Market Psychology", summary: "Understanding trader psychology in forex." }
+];
 
-//routes
-router.get('',async (req, res) => {
+// ✅ Home route (fetches latest articles and displays pre-fetched videos)
+router.get('', async (req, res) => {
+  const local = {
+      title: 'The Market Analyst',
+      description: 'Stay updated with the latest market analysis',
+      keywords: 'market, analysis, stock, forex, crypto'
+  };
 
-    const local ={
-        title: 'The Market Analyst',
-        description: 'This is the home page',
-        keywords: 'market, analysis, stock, forex, crypto'
-    }
+  try {
+      const trendingArticles = await articles.find({ trending: true }).sort({ date: 'desc' }).limit(3).exec();
+      const latestArticles = await articles.find().sort({ date: 'desc' }).limit(9).exec();
 
-    try{
-      const data = await articles.find().sort({date: 'desc'}).limit(9).exec();
-      res.render('index', {local , data});
-
-    }catch(err){
-        console.log(err);
-    } 
+      res.render('index', { local, trendingArticles, latestArticles, videos });
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Server Error");
+  }
 });
 
-//page to display single article
+
+// ✅ Single article page (displays full article and pre-fetched videos)
 router.get('/article/:id', async (req, res) => {
-  try {
-    const local = {
-      title: 'The Market Analyst',
-      description: 'This is the home page',
-      keywords: 'market, analysis, stock, forex, crypto'
-    };
+    try {
+        const local = {
+            title: 'The Market Analyst - Article',
+            description: 'Read detailed market insights',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
 
-    let slug = req.params.id;
-    
-    // Find a single article by ID or slug
-    const data = await articles.findOne({ _id: slug }).exec();
+        let slug = req.params.id;
+        const data = await articles.findOne({ _id: slug }).exec();
 
-    if (!data) {
-      return res.status(404).send("Article not found");
+        if (!data) {
+            return res.status(404).send("Article not found");
+        }
+
+        res.render('article', { local, data, videos });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
     }
-
-    res.render('article', { local, data });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server Error");
-  }
 });
-// multiple page for articles display
+
+// ✅ Paginated articles list page
 router.get('/articles', async (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1; // Default to page 1
-    const limit = 5; // Number of articles per request
-    const skip = (page - 1) * limit;
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+        const skip = (page - 1) * limit;
 
-    const data = await articles.find().sort({ date: 'desc' }).skip(skip).limit(limit).exec();
+        const data = await articles.find().sort({ date: 'desc' }).skip(skip).limit(limit).exec();
 
-    // Check if it's an AJAX request (JSON response) or a full page render
-    if (req.xhr) {
-      return res.json(data); // Return JSON response for AJAX calls
+        if (req.xhr) {
+            return res.json(data);
+        }
+
+        const local = {
+            title: 'All Articles - The Market Analyst',
+            description: 'Browse through all market analysis articles',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
+
+        res.render('articles', { local, data, videos });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error" });
     }
+});
 
+// ✅ Search route (allows users to search articles)
+router.post("/search", async (req, res) => {
+    try {
+        const local = {
+            title: 'Search Results - The Market Analyst',
+            description: 'Find market insights that matter to you',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
+
+        let searchTerm = req.body.searchTerm;
+        const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
+
+        const data = await articles.find({
+            $or: [
+                { title: { $regex: new RegExp(searchNoSpecialChar, 'i') } },
+                { body: { $regex: new RegExp(searchNoSpecialChar, 'i') } }
+            ]
+        });
+
+        res.render('search', { data, local });
+    } catch (err) {
+        console.error("Search error:", err);
+        res.status(500).send("Search failed");
+    }
+});
+
+// ✅ Signal Page
+router.get('/signal', (req, res) => {
     const local = {
-      title: 'The Market Analyst',
-      description: 'This is the home page',
-      keywords: 'market, analysis, stock, forex, crypto'
+        title: 'Market Signals - The Market Analyst',
+        description: 'Get expert trading signals',
+        keywords: 'market, analysis, stock, forex, crypto, trading signals'
     };
 
-    res.render('articles', { local, data });
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Server Error" });
-  }
+    res.render('signal', { local });
 });
 
-
-// Search route
-router.post("/search", async (req, res) => {
- try{
-    const local = {
-      title: 'search',
-      description: 'This is the home page',
-      keywords: 'market, analysis, stock, forex, crypto'
-    }; 
-
-    let searchTerm = req.body.searchTerm
-    const searchNoSpecialChar =  searchTerm.replace(/[^a-zA-Z0-9]/g, "")
-
-    const data = await articles.find({
-     
-      $or : [
-        {title : {$regex : new  RegExp(searchNoSpecialChar, 'i')}},
-        {body : {$regex : new  RegExp(searchNoSpecialChar, 'i')}}
-      ]
-    })
-   res.render('search', {data, local})
-
- }catch(err){
-     console.log("not working 404 error");
- }
-});
-
-// router.get('/articles', async (req, res) => {
-//   try{
-
-//   local = {
-//     title: 'The Market Analyst',
-//     description: 'This is the home page',
-//     keywords: 'market, analysis, stock, forex, crypto'
-//   }
-
-//     const data = await articles.find().sort({date: 'desc'}).limit(100).exec();
-
-//     res.render('articles', {local, data});
-
-//   }catch(err){
-//       console.log(err);
-//   } 
-
-// });
-
-router.get('/signal', (req, res) => {
-
-    local = {
-        title: 'The Market Analyst',
-        description: 'This is the home page',
-        keywords: 'market, analysis, stock, forex, crypto'
-      }
-    
-    res.render('signal', {local});
-});
-
+// ✅ Sign-In Page
 router.get('/signIn', (req, res) => {
+    const local = {
+        title: 'Sign In - The Market Analyst',
+        description: 'Access your account and exclusive content',
+        keywords: 'market, analysis, stock, forex, crypto, sign in'
+    };
 
-    local = {
-        title: 'The Market Analyst',
-        description: 'This is the home page',
-        keywords: 'market, analysis, stock, forex, crypto'
-      }
-
-    res.render('about', {local});
+    res.render('signIn', { local });
 });
 
-
-module.exports = router; // export router
+// ✅ Export the router
+module.exports = router;

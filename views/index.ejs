@@ -1,29 +1,63 @@
+<h2>Trending Articles</h2>
+
+<ul class="post" id="trending-list">
+    <% if (trendingArticles && trendingArticles.length > 0) { %>
+        <% trendingArticles.forEach(article => { %>
+            <li>
+                <% 
+                    // Extract the first image using regex
+                    const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
+                    const firstImage = imgMatch ? imgMatch[1] : null;
+
+                    // Strip HTML tags and limit text preview
+                    const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
+                %>
+
+                <% if (firstImage) { %>
+                    <img src="<%= firstImage %>" alt="Trending Article Image" class="article-preview-img">
+                <% } %>
+
+                <p><%= textOnly %>...</p>
+                <span><%= new Date(article.date).toDateString() %></span>
+                <br>
+                <a href="/article/<%= article._id %>" class="read-more">Read More</a>
+            </li>
+        <% }) %>
+    <% } else { %>
+        <p>No trending articles available.</p>
+    <% } %>
+</ul>
+
+
 <h2>Recent Articles</h2>
 
 <ul class="post" id="post-list">
-    <% data.forEach(article => { %>
-        <li>
-            <% 
-                // Extract the first image using regex
-                const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
-                const firstImage = imgMatch ? imgMatch[1] : null;
+    <% if (latestArticles && latestArticles.length > 0) { %>
+        <% latestArticles.forEach(article => { %>
+            <li>
+                <% 
+                    // Extract the first image using regex
+                    const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
+                    const firstImage = imgMatch ? imgMatch[1] : null;
 
-                // Strip HTML tags and limit text preview
-                const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
-            %>
+                    // Strip HTML tags and limit text preview
+                    const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
+                %>
 
-            <% if (firstImage) { %>
-                <img src="<%= firstImage %>" alt="Article Image" class="article-preview-img">
-            <% } %>
+                <% if (firstImage) { %>
+                    <img src="<%= firstImage %>" alt="Article Image" class="article-preview-img">
+                <% } %>
 
-            <p><%= textOnly %>...</p>
-            <span><%= new Date(article.date).toDateString() %></span>
-            <br>
-            <a href="/article/<%= article._id %>" class="read-more">Read More</a>
-        </li>
-    <% }) %>
+                <p><%= textOnly %>...</p>
+                <span><%= new Date(article.date).toDateString() %></span>
+                <br>
+                <a href="/article/<%= article._id %>" class="read-more">Read More</a>
+            </li>
+        <% }) %>
+    <% } else { %>
+        <p>No recent articles available.</p>
+    <% } %>
 </ul>
-
 
 <button id="load-more">Load More</button>
 
@@ -43,9 +77,17 @@
             const postList = document.getElementById("post-list");
 
             articles.forEach(article => {
+                // Extract first image
+                const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
+                const firstImage = imgMatch ? imgMatch[1] : null;
+
+                // Strip HTML tags and limit text preview
+                const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
+
                 let li = document.createElement("li");
                 li.innerHTML = `
-                    <p>${article.body.substring(0, 100)}...</p>
+                    ${firstImage ? `<img src="${firstImage}" alt="Article Image" class="article-preview-img">` : ""}
+                    <p>${textOnly}...</p>
                     <span>${new Date(article.date).toDateString()}</span>
                     <br>
                     <a href="/article/${article._id}" class="read-more">Read More</a>
