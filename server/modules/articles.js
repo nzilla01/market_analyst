@@ -24,6 +24,10 @@ const articlesSchema = new mongoose.Schema({
     trending: {
         type: Boolean,
         default: false, // By default, an article is not trending
+    },
+    category:{
+        type: 'string',
+        required: true,
     }
 });
 

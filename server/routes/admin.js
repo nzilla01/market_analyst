@@ -160,7 +160,8 @@ router.post('/add_post', authMiddleware, async (req, res) => {
         const newArticle = new Articles({
             title: req.body.title,
             author: req.body.author,
-            body: req.body.body
+            body: req.body.body,
+            category: req.body.category,
         });
 
         await newArticle.save();

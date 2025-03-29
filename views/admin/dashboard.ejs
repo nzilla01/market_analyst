@@ -1,11 +1,13 @@
 <div class="admin">
     <h2>Dashboard</h2>
-</div>
-
-<div class="admin_title">
     <h3>Posts</h3>
     <a href="/add_post" class="button"> + Add New Post </a>
 </div>
+
+<!-- <div class="admin_title">
+    <h3>Posts</h3>
+    <a href="/add_post" class="button"> + Add New Post </a>
+</div> -->
 
 <table class="admin_table">
     <thead>
@@ -40,7 +42,7 @@
                     <form action="/toggle-trending/<%= article._id %>" method="POST" style="display:inline;">
                         <input type="hidden" name="trending" value="<%= !article.trending %>">
                         <button type="submit" class="btn">
-                            <%= article.trending ? 'Unmark Trending' : 'Mark as Trending' %>
+                            <%= article.trending ? ' Trending' : ' Trending' %>
                         </button>
                     </form>
                 </td>

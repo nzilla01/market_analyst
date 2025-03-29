@@ -2,21 +2,35 @@
 
 <form action="/add_post" method="POST" id="postForm">
 
-    <label for="title">Title</label>
+    <div class="title">
+    <label for="title">Title:</label>
     <input type="text" name="title" id="title" placeholder="Post Title" required>
+    </div>
 
-    <label for="author">Author</label>
+    <div class="author">
+    <label for="author">Author:</label>
     <input type="text" name="author" id="author" placeholder="Author" required>
+    </div>
 
-    <label for="content">Content</label>
+    <label for="category"> category:</label>
+    <select name="category" class="cate" required>
+        <option value="select" selected disabled> choose </option>
+        <option value="Trading Analysis">Education</option>
+        <option value="Market Analysis">article </option>
+        <option value="Crypto Analysis">News</option>
+        <option value="Stock Analysis">signals</option>
+      </select>
+
+    <div class="content">
     <div id="editor-container"></div> 
+    </div>
 
     <!-- Hidden input field to store Quill content -->
     <input type="hidden" name="body" id="hiddenContent">
 
     <div class="btns">
         <input type="reset" value="Clear" id="clear-btn">
-        <input type="submit" value="Add Post">
+        <input type="submit" value="Add Post" id="add-btn">
     </div>
 </form>
 
@@ -44,7 +58,7 @@
                 [{ 'font': [] }], 
                 [{ 'align': [] }], 
                 ['clean'], 
-                ['link', 'image', 'video']
+                ['link', 'image', 'video', 'Resize']
         ]
         }
     }
@@ -64,7 +78,6 @@ const storedContent = document.getElementById("hiddenContent").value;
 if (storedContent) {
     quill.clipboard.dangerouslyPasteHTML(storedContent); // Ensures Quill handles the HTML correctly
 }
-
 
 // document.getElementById("postForm").onsubmit = function(event) {
 //     const content = quill.getText().trim();

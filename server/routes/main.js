@@ -56,7 +56,7 @@ router.get('/article/:id', async (req, res) => {
 router.get('/articles', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = 5;
+        const limit = 30;
         const skip = (page - 1) * limit;
 
         const data = await articles.find().sort({ date: 'desc' }).skip(skip).limit(limit).exec();
