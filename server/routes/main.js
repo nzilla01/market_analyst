@@ -39,7 +39,7 @@ router.get('/article/:id', async (req, res) => {
         };
 
         let slug = req.params.id;
-        const data = await articles.findOne({ _id: slug }).exec();
+        const data = await articles.findOne({  _id: slug }).exec();
 
         if (!data) {
             return res.status(404).send("Article not found");
@@ -59,7 +59,7 @@ router.get('/articles', async (req, res) => {
         const limit = 30;
         const skip = (page - 1) * limit;
 
-        const data = await articles.find().sort({ date: 'desc' }).skip(skip).limit(limit).exec();
+        const data = await articles.find({category: "articles"}).sort({ date: 'desc' }).skip(skip).limit(limit).exec();
 
         if (req.xhr) {
             return res.json(data);
@@ -126,5 +126,55 @@ router.get('/signIn', (req, res) => {
     res.render('signIn', { local });
 });
 
+// News Page
+router.get('/news', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 30;
+        const skip = (page - 1) * limit;
+
+        const data = await articles.find({category: "news"}).sort({ date: 'desc' }).skip(skip).limit(limit).exec();
+
+        if (req.xhr) {
+            return res.json(data);
+        }
+
+        const local = {
+            title: 'All Articles - The Market Analyst',
+            description: 'Browse through all market analysis articles',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
+
+        res.render('articles', { local, data, videos });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error" });
+    }
+})
+
+router.get('/education', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 30;
+        const skip = (page - 1) * limit;
+
+        const data = await articles.find({category: "education"}).sort({ date: 'desc' }).skip(skip).limit(limit).exec();
+
+        if (req.xhr) {
+            return res.json(data);
+        }
+
+        const local = {
+            title: 'All Articles - The Market Analyst',
+            description: 'Browse through all market analysis articles',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
+
+        res.render('articles', { local, data, videos });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error" });
+    }
+})
 // ✅ Export the router
 module.exports = router;

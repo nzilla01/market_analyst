@@ -14,6 +14,7 @@
         <tr>
             <th>Title</th>
             <th>Author</th>
+            <th> cate</th>
             <th>Date</th>
             <th>Trending</th>
             <th>Actions</th>
@@ -24,6 +25,7 @@
             <tr>
                 <td><a href="/article/<%= article._id %>"><%= article.title %></a></td>
                 <td><%= article.author %></td>
+                <td><%= article. category %></td>
                 <td><%= new Date(article.date).toDateString() %></td>
                 <td>
                     <% if (article.trending) { %>
@@ -32,6 +34,7 @@
                         ❌ No
                     <% } %>
                 </td>
+                
                 <td>
                     <a href="/edit_post/<%= article._id %>" class="btn">Edit</a>
 

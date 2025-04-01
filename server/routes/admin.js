@@ -133,8 +133,13 @@ router.get('/dashboard', authMiddleware, async (req, res) => {
     };
 
     try {
+        const news = await Articles.find({ category: { $regex: /^news$/i } }).sort({ date: 'desc' }).limit(20).exec();
+        const art = await Articles.find({ category: { $regex: /^articles$/i } }).sort({ date: 'desc' }).limit(20).exec();
+        const edu = await Articles.find({ category: { $regex: /^education$/i } }).sort({ date: 'desc' }).limit(20).exec();
+        
         const data = await Articles.find().sort({ date: 'desc' }).limit(20).exec();
-        res.render('admin/dashboard', { local, data, layout: adminLayout });
+        
+        res.render('admin/dashboard', { local, data, edu, news, art, layout: adminLayout });
     } catch (err) {
         console.log(err);
         res.status(500).send("Error loading dashboard");
@@ -157,21 +162,28 @@ router.post('/add_post', authMiddleware, async (req, res) => {
     try {
         console.log("Received Data:", req.body); // Debugging
 
+        const validCategories = ["news", "articles", "education", "signals"]; // Allowed categories
+        let category = req.body.category.toLowerCase(); // Normalize input
+
+        if (!validCategories.includes(category)) {
+            return res.send("<script>alert('Invalid category selected!'); window.history.back();</script>");
+        }
+
         const newArticle = new Articles({
             title: req.body.title,
             author: req.body.author,
             body: req.body.body,
-            category: req.body.category,
+            category: category, // Store only valid category
         });
 
         await newArticle.save();
-
         res.redirect('/dashboard');
     } catch (err) {
         console.error("Error creating post:", err);
         res.status(500).send("<script>alert('Error creating post! Try again later.'); window.history.back();</script>");
     }
 });
+
 
 router.get('/edit_post/:id', authMiddleware, async (req, res)=>{
     try{
@@ -194,6 +206,7 @@ router.get('/edit_post/:id', authMiddleware, async (req, res)=>{
 
 
 router.put('/edit_post/:id', authMiddleware, async (req, res) => {
+    
     try {
         await Articles.findByIdAndUpdate(req.params.id, {
             title: req.body.title,
@@ -275,8 +288,6 @@ router.get('/logout', async (req, res) => {
     res.clearCookie("token"); // Clear JWT token cookie
     res.redirect('/admin'); // ✅ Redirect to the admin login page
 });
-
-
 
 
 

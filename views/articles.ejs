@@ -1,8 +1,8 @@
 <h2>Recent Articles</h2>
 
 <ul class="post" id="post-list">
-    <% if (article && article.length > 0) { %>
-        <% article.forEach(articleItem => { %> <!-- Use 'articleItem' to avoid conflicts -->
+    <% if (data && data.length > 0) { %>
+        <% data.forEach(articleItem => { %> <!-- Use 'articleItem' to avoid conflicts -->
             <li>
                 <% 
                     // Extract the first image using regex
