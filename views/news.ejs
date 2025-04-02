@@ -1,8 +1,9 @@
-<h2>Recent Articles</h2>
+<div  class="art">
+<h2>Recent News</h2>
 
 <ul class="post" id="post-list">
-    <% if (article && article.length > 0) { %>
-        <% article.forEach(articleItem => { %> <!-- Use 'articleItem' to avoid conflicts -->
+    <% if (data && data.length > 0) { %>
+        <% data.forEach(articleItem => { %> <!-- Use 'articleItem' to avoid conflicts -->
             <li>
                 <% 
                     // Extract the first image using regex
@@ -28,46 +29,5 @@
     <% } %>
 </ul>
 
-<button id="load-more">Load More</button>
-
-<script>
-    let page = 2; // Start from page 2 since page 1 is already loaded
-
-    document.getElementById("load-more").addEventListener("click", async function() {
-        try {
-            const response = await fetch(`/articles?page=${page}`, { headers: { "X-Requested-With": "XMLHttpRequest" } });
-            const articles = await response.json();
-
-            if (articles.length === 0) {
-                document.getElementById("load-more").style.display = "none"; // Hide button when no more articles
-                return;
-            }
-
-            const postList = document.getElementById("post-list");
-
-            articles.forEach(articleItem => {
-                // Extract first image
-                const imgMatch = articleItem.body.match(/<img.*?src=["'](.*?)["']/);
-                const firstImage = imgMatch ? imgMatch[1] : null;
-
-                // Strip HTML tags and limit text preview
-                const textOnly = articleItem.body.replace(/<[^>]*>/g, "").substring(0, 100);
-
-                let li = document.createElement("li");
-                li.innerHTML = `
-                    ${firstImage ? `<img src="${firstImage}" alt="Article Image" class="article-preview-img">` : ""}
-                    <p>${textOnly}...</p>
-                    <span>${new Date(articleItem.date).toDateString()}</span>
-                    <br>
-                    <a href="/article/${articleItem._id}" class="read-more">Read More</a>
-                `;
-                postList.appendChild(li);
-            });
-
-            page++; // Move to the next page
-
-        } catch (error) {
-            console.error("Error loading articles:", error);
-        }
-    });
-</script>
+<!-- <button id="load-more">Load More</button> -->
+</div>

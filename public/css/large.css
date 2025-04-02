@@ -9,7 +9,7 @@
         --hover : #e6b800;
         --text1 : #ffffff;
         --text2: #cccccc;
-        --admin: #041f3b 
+        --admin: #052c55
     }
 
     *{
@@ -43,9 +43,27 @@
         top:0;
         z-index: 3;
     }
-    .nav__list{
+
+    .nav__lists{
         display: flex;
 
+    }
+
+    .nav__lists li{
+        list-style: none;
+        margin-right: 30px;
+        margin-top: 18px;
+        
+    }
+    .nav__lists li a{
+        color: var(--text1);
+        font-size: 14px;
+        justify-content: center;
+    }
+
+    /* normal nav */
+    .nav__list{
+        display: flex;
     }
     .nav__list li{
         list-style: none;
@@ -511,8 +529,17 @@ tbody tr:nth-child(odd) {
       }
 
       #add-btn{
-        background-color:rgb(121, 204, 245);
+        background-color:rgb(25, 142, 201);
         padding: 5px 5px;
+        font-size: 20px;
+        margin:0px 20px;
+        font-family: cursive;
+        border: none;
+        border-radius: 20px;
+      }
+      .delete-btn{
+        background-color:rgb(209, 59, 14);
+        padding: 5px 10px;
         font-size: 20px;
         margin:0px 20px;
         font-family: cursive;
@@ -579,6 +606,7 @@ tbody tr:nth-child(odd) {
    #form .btn:hover {
         background: #0056b3;
     }  
+      
 
     /* foot designer */
 
@@ -618,9 +646,9 @@ tbody tr:nth-child(odd) {
 
 
     }
-    .footer{
+    .footers{
         color:var(--text1);
-        background: #041f3b;
+        background: var(--admin);
         font-size: 15px ;
         padding: 5px;
         font-weight: 200;

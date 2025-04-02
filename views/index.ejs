@@ -1,5 +1,6 @@
-<h2>Trending Articles</h2>
 
+
+<div class="home">
 <ul class="post" id="trending-list">
     <% if (trendingArticles && trendingArticles.length > 0) { %>
         <% trendingArticles.forEach(article => { %>
@@ -14,13 +15,12 @@
                 %>
 
                 <% if (firstImage) { %>
-                    <img src="<%= firstImage %>" alt="Trending Article Image" class="article-preview-img">
+                    <a href="/article/<%= article._id %>" class="read-more"> <img src="<%= firstImage %>" alt="Trending Article Image" class="article-preview-img"></a>
                 <% } %>
 
                 <p><%= textOnly %>...</p>
                 <span><%= new Date(article.date).toDateString() %></span>
                 <br>
-                <a href="/article/<%= article._id %>" class="read-more">Read More</a>
             </li>
         <% }) %>
     <% } else { %>
@@ -29,7 +29,7 @@
 </ul>
 
 
-<h2>Recent Articles</h2>
+<h2 class="recent">Recent Articles</h2>
 
 <ul class="post" id="post-list">
     <% if (latestArticles && latestArticles.length > 0) { %>
@@ -57,48 +57,33 @@
     <% } else { %>
         <p>No recent articles available.</p>
     <% } %>
+    <button id="load-more">Load More</button>
 </ul>
 
-<button id="load-more">Load More</button>
+<div class="about_page">
 
-<script>
-    let page = 2; // Start from page 2 since page 1 is already loaded
+    <h2 class="abt"> About The Market Analyst</h2>
 
-    document.getElementById("load-more").addEventListener("click", async function() {
-        try {
-            const response = await fetch(`/articles?page=${page}`, { headers: { "X-Requested-With": "XMLHttpRequest" } });
-            const articles = await response.json();
+   <p><strong>The Market Analyst</strong> is a project built by traders, for traders.
+     We recognize that many new traders face challenges in understanding 
+     <strong>fundamental analysis</strong>—a crucial aspect of financial markets that drives price movements.
+      While technical analysis is widely discussed, grasping <strong>the impact of economic reports, central bank policies,
+         and macroeconomic trends</strong> can be overwhelming for many. 
+         That’s why <strong>The Market Analyst</strong> was created—to simplify and streamline this process.
+        </p> <p>Our blog provides <strong>weekly insights</strong> from some of the most respected fundamental analysts, including 
+            <i><a href="https://www.youtube.com/@TraderNick"> Trader Nick</a></i>, <i><a href="https://www.youtube.com/@aspiretradingco"> Alan Prez</a></i> and other top market experts. Instead of spending hours navigating different channels,
+             websites, and forums for expert opinions, we bring <strong>all the critical market updates into one place</strong>. 
+             Here, you’ll find concise, well-structured summaries of key market events, ensuring you stay ahead of trends without
+              information overload.</p> <p>As a trader, I personally experienced the frustration of jumping from one professional 
+                trader to another, searching for reliable insights on <strong>breaking financial news and market trends</strong>.
+                 I know how time-consuming and exhausting it can be to filter through different opinions, trying to piece together 
+                 a coherent market outlook. <strong>The Market Analyst</strong> eliminates this struggle by delivering <strong>expert
+       summaries</strong> in an easy-to-digest format, so traders of all levels can make informed decisions with confidence.</p> 
+       <p>Whether you're just starting your trading journey or you're an experienced trader looking to refine your understanding of
+         <strong>fundamentals</strong>, this blog is designed to be your <strong>go-to resource</strong> for market analysis.
+          Our goal is to help traders bridge the gap between <strong>raw market data and actionable trading strategies</strong>,
+           ensuring you’re always one step ahead in the financial markets.</p> <p>Stay informed, trade smarter, and let <strong>
+            The Market Analyst</strong> be your trusted source for market insights.</p>
 
-            if (articles.length === 0) {
-                document.getElementById("load-more").style.display = "none"; // Hide button when no more articles
-                return;
-            }
-
-            const postList = document.getElementById("post-list");
-
-            articles.forEach(article => {
-                // Extract first image
-                const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
-                const firstImage = imgMatch ? imgMatch[1] : null;
-
-                // Strip HTML tags and limit text preview
-                const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
-
-                let li = document.createElement("li");
-                li.innerHTML = `
-                    ${firstImage ? `<img src="${firstImage}" alt="Article Image" class="article-preview-img">` : ""}
-                    <p>${textOnly}...</p>
-                    <span>${new Date(article.date).toDateString()}</span>
-                    <br>
-                    <a href="/article/${article._id}" class="read-more">Read More</a>
-                `;
-                postList.appendChild(li);
-            });
-
-            page++; // Move to the next page
-
-        } catch (error) {
-            console.error("Error loading articles:", error);
-        }
-    });
-</script>
+</div>
+</div>

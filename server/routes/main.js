@@ -145,7 +145,7 @@ router.get('/news', async (req, res) => {
             keywords: 'market, analysis, stock, forex, crypto'
         };
 
-        res.render('articles', { local, data, videos });
+        res.render('news', { local, data, videos });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error" });
@@ -170,7 +170,7 @@ router.get('/education', async (req, res) => {
             keywords: 'market, analysis, stock, forex, crypto'
         };
 
-        res.render('articles', { local, data, videos });
+        res.render('education', { local, data, videos });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error" });

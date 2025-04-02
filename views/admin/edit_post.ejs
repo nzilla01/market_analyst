@@ -1,27 +1,44 @@
 <h3> Edit Post Article</h3>
 
 <form action="/edit_post/<% data._id %>?_method=PUT" method="POST" id="postForm">
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title" placeholder="Post Title" required  value="<% data.title %>">
-
-    <label for="author">Author</label>
-    <input type="text" name="author" id="author" placeholder="Author" required value="<% data.author %>">
-
-    <label for="content">Content</label>
-    <div id="editor-container"></div> 
-
+    <div class="titles">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="titles" placeholder="Post Title" required>
+        </div>
+    
+        <div class="authors">
+        <label for="author">Author:</label>
+        <input type="text" name="author" id="authors" placeholder="Author" required>
+        </div>
+    
+        <label for="category"> category:</label>
+        <select name="category" class="cate" required>
+            <option value="select" selected disabled> choose </option>
+            <option value="education">Education</option>
+            <option value="articles">article </option>
+            <option value="news">News</option>
+            <option value=" signals">signals</option>
+          </select>
+    
+        <div class="content">
+        <div id="editor-container"></div> 
+        </div>
     <!-- Hidden input field to store Quill content -->
     <input type="hidden" name="body" id="hiddenContent" <%= data.body  %>>
 
 
     <div class="btns">
         <input type="reset" value="Clear" id="clear-btn">
-        <input type="submit" value="Add Post">
+        <input type="submit" value="Add Post" id="add-btn">
+        <form action="/delete-post/<%= data._id %>?_method=DELETE" method="POST">
+            <input type="submit" value="Delete" class="delete-btn">
+        </form>
     </div>
-</form>
-<form action="/delete-post/<%= data._id %>?_method=DELETE" method="POST">
-    <input type="submit" value="Delete" class="btn">
-</form>
+
+    </form>
+    
+   
+
 
 
 <!-- Quill.js Scripts -->

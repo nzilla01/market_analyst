@@ -1,7 +1,7 @@
 <article class="single">
-    <h1><%= data.title %></h1>
+    <h1 id="title"><%= data.title %></h1>
     <span><%= data.date.toDateString() %></span>
-    <span id="author"><%= data.author %></span>
+    <p id="author"><%= data.author %></p>
     <div>
         <%- data.body %> <!-- Corrected variable name -->
     </div>
