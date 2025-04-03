@@ -1,19 +1,22 @@
-<div class="author">
-    <h1 class="author_heeading">Search Result</h1>
-</div>
+<div class="search-term">
+  <div class="search">
+    <h1 class="author_heading">Search Result</h1>
+  </div>
 
-<section class="article">
-
-<ul class="post">
+  <section class="article">
+    <ul class="post">
+      <% if (data && data.length > 0) { %> <!-- Ensure 'data' exists and is not empty -->
         <% data.forEach(article => { %>
           <li>
-              <p><%= article.body.substring(0, 100) %>...</p> <!-- Show only first 100 characters -->
-              <span><%= article.date.toDateString() %></span>
-            <br>
-            <a href="/article/<%= article._id %>" class="read-more">Read More</a>
+            <p>
+              <a href="/article/<%= article._id %>" class="read-more"><%= article.title %></a>
+            </p>
+            <span><%= new Date(article.date).toDateString() %></span>
           </li>
         <% }) %>
-      </ul>
-      
-
-</section>
+      <% } else { %>
+        <p>No articles found for your search.</p> <!-- Handle empty search results -->
+      <% } %>
+    </ul>
+  </section>
+</div>

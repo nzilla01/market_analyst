@@ -122,10 +122,12 @@
     }
     /* the body part of index page */
 /* don't show the side bar on the mobile version */
-.main .side_bar {
+aside {
     display: none;
 }
-
+.suggest img{
+    width: 100px;
+}
 h2.recent {
     text-align: center;
     color: rgb(32, 32, 36);

@@ -18,7 +18,11 @@
 
        
         <main class="main">
-            <%- include('../partials/sidebar.ejs') %>
+            <%- include('../partials/sidebar.ejs', { 
+                suggestedArticles: typeof suggestedArticles !== 'undefined' ? suggestedArticles : [], 
+                relatedArticles: typeof relatedArticles !== 'undefined' ? relatedArticles : [] 
+            }) %>
+            
         <%- body %>
         </main>
 

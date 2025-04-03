@@ -113,13 +113,19 @@
         display: none;
     }
     /* the body part of index page */
-
+    .search-term{
+        line-height: 2;
+        text-align: center;
+    }
   
     .main{
       display: grid;
       grid-template-columns: 1fr 4fr 1fr;
+      column-gap: 10px;
     }
-    
+    .suggest{
+        display: none;
+    }
   
   h2.recent {
       text-align: center;
@@ -218,7 +224,8 @@
       font-size: 16px;
       color: #333;
       line-height: 1.6;
-      margin-top: 10px;
+      margin: 10px ;
+      
   }
   
   #post-list img {
@@ -444,8 +451,20 @@ tbody tr:nth-child(odd) {
         font-weight: 100;
       }
 
-      .side_bar{
-        box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.2);
+      aside{
+        line-height: 1.2;
+      }
+
+      aside h3{
+        text-align: center;
+      }
+
+      aside a {
+        color: #0c0c0e;
+      }
+
+      .art h2{
+        text-align: center;
       }
 
 
@@ -557,7 +576,10 @@ tbody tr:nth-child(odd) {
         border-radius: 20px;
       }
 
-
+     aside .article-image img{
+        width: 100%;
+     }
+    
       /* form for sign up and sign in */
 
       #form {

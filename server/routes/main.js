@@ -11,21 +11,22 @@ const videos = [
 
 // ✅ Home route (fetches latest articles and displays pre-fetched videos)
 router.get('', async (req, res) => {
-  const local = {
-      title: 'The Market Analyst',
-      description: 'Stay updated with the latest market analysis',
-      keywords: 'market, analysis, stock, forex, crypto'
-  };
+    const local = {
+        title: 'The Market Analyst',
+        description: 'Stay updated with the latest market analysis',
+        keywords: 'market, analysis, stock, forex, crypto'
+    };
 
-  try {
-      const trendingArticles = await articles.find({ trending: true }).sort({ date: 'desc' }).limit(3).exec();
-      const latestArticles = await articles.find().sort({ date: 'desc' }).limit(9).exec();
+    try {
+        const trendingArticles = await articles.find({ trending: true }).sort({ date: 'desc' }).limit(3).exec();
+        const latestArticles = await articles.find({ category: 'articles',  category: 'news'}).sort({ date: 'desc' }).limit(9).exec();
+        const suggestedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(5).exec(); // Fetch education articles
 
-      res.render('index', { local, trendingArticles, latestArticles, videos });
-  } catch (err) {
-      console.error(err);
-      res.status(500).send("Server Error");
-  }
+        res.render('index', { local, trendingArticles, latestArticles, suggestedArticles, videos });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
 });
 
 
@@ -39,18 +40,32 @@ router.get('/article/:id', async (req, res) => {
         };
 
         let slug = req.params.id;
-        const data = await articles.findOne({  _id: slug }).exec();
+        const data = await articles.findOne({ _id: slug }).exec();
 
         if (!data) {
             return res.status(404).send("Article not found");
         }
 
-        res.render('article', { local, data, videos });
+        // Fetch related articles (same category, excluding the current one)
+        const relatedArticles = await articles.find({ 
+            category: data.category, 
+            _id: { $ne: data._id }  // Use `data._id` instead of `slug`
+        }).sort({ date: 'desc' }).limit(10).exec();
+
+        res.render('article', { 
+            local, 
+            data, 
+            relatedArticles, 
+            isSingleArticlePage: true // Ensure this flag is included
+        });
+
     } catch (err) {
         console.error(err);
         res.status(500).send("Server Error");
     }
 });
+
+
 
 // ✅ Paginated articles list page
 router.get('/articles', async (req, res) => {
@@ -88,8 +103,15 @@ router.post("/search", async (req, res) => {
         };
 
         let searchTerm = req.body.searchTerm;
+        
+        // If no search term is provided, return a message
+        if (!searchTerm || searchTerm.trim() === "") {
+            return res.render('search', { data: [], local, message: 'Please enter a search term.' });
+        }
+
         const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g, "");
 
+        // Search for articles matching title or body
         const data = await articles.find({
             $or: [
                 { title: { $regex: new RegExp(searchNoSpecialChar, 'i') } },
@@ -97,12 +119,16 @@ router.post("/search", async (req, res) => {
             ]
         });
 
-        res.render('search', { data, local });
+        res.render('search', { data, local, message: data.length ? null : 'No articles found for your search.' });
     } catch (err) {
         console.error("Search error:", err);
         res.status(500).send("Search failed");
     }
 });
+
+
+
+
 
 // ✅ Signal Page
 router.get('/signal', (req, res) => {
@@ -127,6 +153,7 @@ router.get('/signIn', (req, res) => {
 });
 
 // News Page
+// News Page
 router.get('/news', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -135,22 +162,28 @@ router.get('/news', async (req, res) => {
 
         const data = await articles.find({category: "news"}).sort({ date: 'desc' }).skip(skip).limit(limit).exec();
 
+        // Fetch related news articles (same category, excluding current article)
+        const relatedArticles = await articles.find({ category: 'news' }).sort({ date: 'desc' }).limit(5).exec();
+
+        // Suggested articles from education
+        const suggestedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(5).exec();
+
         if (req.xhr) {
             return res.json(data);
         }
 
         const local = {
-            title: 'All Articles - The Market Analyst',
-            description: 'Browse through all market analysis articles',
-            keywords: 'market, analysis, stock, forex, crypto'
+            title: 'All News - The Market Analyst',
+            description: 'Browse through all market news articles',
+            keywords: 'market, news, stock, forex, crypto'
         };
 
-        res.render('news', { local, data, videos });
+        res.render('news', { local, data, relatedArticles, suggestedArticles, videos });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error" });
     }
-})
+});
 
 router.get('/education', async (req, res) => {
     try {
@@ -160,21 +193,27 @@ router.get('/education', async (req, res) => {
 
         const data = await articles.find({category: "education"}).sort({ date: 'desc' }).skip(skip).limit(limit).exec();
 
+        // Fetch related education articles
+        const relatedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(5).exec();
+
+        // Suggested articles from education
+        const suggestedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(5).exec();
+
         if (req.xhr) {
             return res.json(data);
         }
 
         const local = {
-            title: 'All Articles - The Market Analyst',
-            description: 'Browse through all market analysis articles',
-            keywords: 'market, analysis, stock, forex, crypto'
+            title: 'All Education Articles - The Market Analyst',
+            description: 'Browse through all market education articles',
+            keywords: 'education, trading, forex, crypto'
         };
 
-        res.render('education', { local, data, videos });
+        res.render('education', { local, data, relatedArticles, suggestedArticles, videos });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server Error" });
     }
-})
-// ✅ Export the router
+});
+
 module.exports = router;

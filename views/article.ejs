@@ -1,8 +1,40 @@
+<div class="article">
 <article class="single">
     <h1 id="title"><%= data.title %></h1>
     <span><%= data.date.toDateString() %></span>
     <p id="author"><%= data.author %></p>
     <div>
-        <%- data.body %> <!-- Corrected variable name -->
+        <%- data.body %> 
     </div>
+       
 </article>
+<div class="suggest">
+<% if (typeof isSingleArticlePage !== 'undefined' && isSingleArticlePage && relatedArticles && relatedArticles.length) { %>
+    <h3>Related Articles</h3>
+    <ul>
+        <% relatedArticles.forEach(article => { %>
+            <% 
+                // Extract the first image using regex
+                const imgMatch = article.body.match(/<img.*?src=["'](.*?)["']/);
+                const firstImage = imgMatch ? imgMatch[1] : null;
+
+                // Strip HTML tags and limit preview text to 100 characters
+                const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
+            %>
+            <li>
+                <!-- Display image if available -->
+                <% if (firstImage) { %>
+                    <div class="article-image">
+                        <img src="<%= firstImage %>" alt="<%= article.title %>" />
+                    </div>
+                <% } %>
+
+                <a href="/article/<%= article._id %>"><%= article.title %></a>
+            </li>
+        <% }) %>
+    </ul>
+<% } %>
+</div>
+</div>
+
+
