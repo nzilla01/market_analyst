@@ -121,12 +121,26 @@
         font-size: 15px;
     }
     /* the body part of index page */
+
 /* don't show the side bar on the mobile version */
 aside {
     display: none;
 }
 .suggest img{
     width: 100px;
+}
+.suggest h3{
+    text-align: center;
+}
+.suggest{
+    padding:10px;
+    margin: 10px 0;
+
+}
+.suggest ul li a{
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
 }
 h2.recent {
     text-align: center;
@@ -139,6 +153,7 @@ ul#trending-list {
     margin: 20px auto;
     height: 250px;
 }
+
 
 ul#trending-list li {
     position: absolute;
@@ -165,11 +180,11 @@ ul#trending-list p {
     font-weight: 700;
     opacity: 0.9;
     position: absolute;
-    top:30%;
+    top:10%;
     left: 10px;
     right: 10px; /* Keep text within the bounds */
     color: #0c0c0b;
-    background: rgba(224, 221, 221, 0.3); /* Semi-transparent black for better visibility */
+    background: rgba(224, 221, 221, 0.8); /* Semi-transparent black for better visibility */
     padding: 5px 10px;
     border-radius: 5px;
 }
@@ -340,7 +355,7 @@ ul#trending-list span {
 }
 .single #title {
     text-align: center;
-    font-size: 50px;
+    font-size: 30px;
     font-weight: bold;
     color: #333;
     margin-bottom: 10px;
@@ -364,7 +379,7 @@ ul#trending-list span {
 
 .single p {
     font-size: 18px;
-    line-height: 1.6;
+    line-height: 1.4;
     color: #444;
     text-align: justify;
     margin-bottom: 15px;
@@ -471,7 +486,7 @@ ul#trending-list span {
     }
     .signin{
         font-size: 30px;
-        font-weight: 100;
+        font-weight: 500;
     }
     #form .form-group {
         display: flex;
@@ -479,9 +494,11 @@ ul#trending-list span {
     }
     
     #form label {
-        font-weight: 300;
+        font-weight: 400;
         margin-bottom: 5px;
         text-align: left;
+        font-size: 20px;
+        font-family: sans-serif;
     }
     
     #form input {
@@ -500,7 +517,7 @@ ul#trending-list span {
     
     #form .btn {
         padding: 10px;
-        background: #007bff;
+        background: #012144;
         color: white;
         border: none;
         border-radius: 5px;
@@ -521,6 +538,10 @@ ul#trending-list span {
     }
     .ft{
         text-align: center;
+    }
+    .socials{
+        text-align: right;
+        justify-content: right;
     }
 
     /* post article  */
@@ -622,7 +643,7 @@ tbody tr:nth-child(odd) {
         border-collapse: separate;
         border-spacing: 0 15px; /* 10px space between rows */
         font-size: 14px;
-        font-weight: 100;
+        font-weight: 400;
       }
 
 

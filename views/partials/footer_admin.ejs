@@ -1,5 +1,5 @@
 <div class="footers">
-    <p class="ft">&copy; <span class="date"></span> Market Analysis & Insights</p>
+    <p class="ft">&copy; <span id="date"></span> Market Analysis & Insights</p>
     <p><small> <span class="under"> Disclaimer </span> : Financial markets are inherently volatile, and investments carry risks. 
       The information provided on The Market Analyst is for educational and informational purposes only 
       and should not be considered financial advice. We strongly encourage you to conduct your own research, 
@@ -7,3 +7,7 @@
        decisions. Past performance is not indicative of future results, and we do not guarantee any specific 
        outcomes. By using this website, you acknowledge and accept full responsibility for your financial choices. 🚀</small></p>
 </div>
+
+<script>
+  document.getElementById('date').textContent = new Date().getFullYear();
+</script>

@@ -12,11 +12,6 @@
 
                 <li>
                     <!-- Display image if available -->
-                    <% if (firstImage) { %>
-                        <div class="article-image">
-                            <img src="<%= firstImage %>" alt="<%= article.title %>" />
-                        </div>
-                    <% } %>
 
                     <a href="/article/<%= article._id %>"><%= article.title %></a>
                 </li>
@@ -42,12 +37,6 @@
                 const textOnly = article.body.replace(/<[^>]*>/g, "").substring(0, 100);
             %>
             <li>
-                <!-- Display image if available -->
-                <% if (firstImage) { %>
-                    <div class="article-image">
-                        <img src="<%= firstImage %>" alt="<%= article.title %>" />
-                    </div>
-                <% } %>
 
                 <a href="/article/<%= article._id %>"><%= article.title %></a>
             </li>

@@ -19,8 +19,8 @@ router.get('', async (req, res) => {
 
     try {
         const trendingArticles = await articles.find({ trending: true }).sort({ date: 'desc' }).limit(3).exec();
-        const latestArticles = await articles.find({ category: 'articles',  category: 'news'}).sort({ date: 'desc' }).limit(9).exec();
-        const suggestedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(5).exec(); // Fetch education articles
+        const latestArticles = await articles.find({ category:  { $in: ['articles', 'news'] }}).sort({ date: 'desc' }).limit(9).exec();
+        const suggestedArticles = await articles.find({ category: 'education' }).sort({ date: 'desc' }).limit(20).exec(); // Fetch education articles
 
         res.render('index', { local, trendingArticles, latestArticles, suggestedArticles, videos });
     } catch (err) {
@@ -33,11 +33,6 @@ router.get('', async (req, res) => {
 // ✅ Single article page (displays full article and pre-fetched videos)
 router.get('/article/:id', async (req, res) => {
     try {
-        const local = {
-            title: 'The Market Analyst - Article',
-            description: 'Read detailed market insights',
-            keywords: 'market, analysis, stock, forex, crypto'
-        };
 
         let slug = req.params.id;
         const data = await articles.findOne({ _id: slug }).exec();
@@ -46,11 +41,17 @@ router.get('/article/:id', async (req, res) => {
             return res.status(404).send("Article not found");
         }
 
+        const local = {
+            title: 'data.title ',
+            description: 'data.body?.silce(0, 150)',
+            keywords: 'market, analysis, stock, forex, crypto'
+        };
+
         // Fetch related articles (same category, excluding the current one)
         const relatedArticles = await articles.find({ 
             category: data.category, 
             _id: { $ne: data._id }  // Use `data._id` instead of `slug`
-        }).sort({ date: 'desc' }).limit(10).exec();
+        }).sort({ date: 'desc' }).limit(20).exec();
 
         res.render('article', { 
             local, 
@@ -126,6 +127,16 @@ router.post("/search", async (req, res) => {
     }
 });
 
+router.get('/about', (req, res) => {
+    const local = {
+        title: 'Market Signals - The Market Analyst',
+        description: 'Get expert trading signals',
+        keywords: 'market, analysis, stock, forex, crypto, trading signals'
+    };
+
+    res.render('about', { local });
+});
+
 
 
 
@@ -152,7 +163,6 @@ router.get('/signIn', (req, res) => {
     res.render('signIn', { local });
 });
 
-// News Page
 // News Page
 router.get('/news', async (req, res) => {
     try {

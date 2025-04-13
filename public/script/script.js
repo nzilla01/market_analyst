@@ -72,5 +72,5 @@ showSlide(currentIndex);
 setInterval(nextSlide, 5000);
 });
 
-document.querySelector('.date').textContent = new Date().getFullYear();
+
 
