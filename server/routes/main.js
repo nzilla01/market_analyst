@@ -42,8 +42,8 @@ router.get('/article/:id', async (req, res) => {
         }
 
         const local = {
-            title: 'data.title ',
-            description: 'data.body?.silce(0, 150)',
+            title: data.title,
+            description : data.body ? data.body.slice(0, 150) : '', 
             keywords: 'market, analysis, stock, forex, crypto'
         };
 
