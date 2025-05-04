@@ -59,7 +59,7 @@ router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
 // Admin sign in
 router.get('/admin', async (req, res) => {
     const local = {
-        title: 'Admin Panel',
+        title: 'admin sign in',
         description: 'Admin Dashboard',
         keywords: 'market, analysis, stock, forex, crypto'
     };

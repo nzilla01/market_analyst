@@ -1,4 +1,4 @@
-@media screen and (max-width: 790px) {
+@media screen and (max-width: 800px) {
     :root{
         --header: #1a1a1a;
         --accent: #111111;
@@ -32,7 +32,7 @@
         z-index: 5;
     }
     .nav__list{
-        background-color: var(--header);
+        background-color: rgba(0, 0, 0, 0.55);
     }
     .nav__lists{
         background-color: var(--admin);
@@ -80,8 +80,11 @@
         left: 0;
         width: 100%;
         padding: 10px;
-        line-height: 3rem;
-        transition: 0.5s ease-in; 
+        line-height: 1.9;
+        transition: 0.5s ease-in;  
+        backdrop-filter: blur(20px); 
+        height: 100vh;
+        font-size: 30px;;
     }
         
     .nav__list li a{
@@ -167,6 +170,7 @@ ul#trending-list li {
 ul#trending-list li.active {
     opacity: 1;  /* Show only the active list item */
     position: relative;
+      
 }
 
 
