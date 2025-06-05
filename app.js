@@ -37,7 +37,7 @@ app.use(express.json()); // body parser
 const port =3000|| process.env.PORT; // port number
 
 app.use('/', require('./server/routes/main'));
-app.use('/', require('./server/routes/admin')); // use index route
+app.use('/', require('./server/routes/admin')); // use index rou te
 // app.use('/api', require('./server/routes/api'));
 
 
